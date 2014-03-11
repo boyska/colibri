@@ -22,6 +22,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __str__(self):
+        return '<Role: %s>' % (self.name)
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,50 +35,16 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
 
-
-class Book(db.Model):
-    id = db.Column(db.String(32), primary_key=True, unique=True)
-    title = db.Column(db.String(140))
-    authors = db.relationship("Author",
-                              secondary="book_author",
-                              backref=db.backref("books", lazy='dynamic'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    #FIXME: non funziona boh
-    #position = db.relationship("Position", uselist=False, backref="books", lazy="dynamic")
-    #category = db.relationship("Category", uselist=False, backref="books", lazy="dynamic")
-
-    __mapper_args__ = {
-        'version_id_col': id,
-        'version_id_generator': lambda version: uuid4().hex
-    }
-
-    def __init__(self, title, authors):
-        self.title = title
-        self.authors = authors
-
-    def __repr__(self):
-        return '<Book %r>' % self.id
-
-book_author = db.Table('book_author',
-                       db.Column('book_id', db.String(32),
-                                 db.ForeignKey('book.id')),
-                       db.Column('author_id', db.Integer,
-                                 db.ForeignKey('author.id'))
-                       )
+    def __str__(self):
+        return '<Role: %s>' % (self.email)
 
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(512))
 
-    def __init__(self, name):
-        self.name = name
-
-
-class Position(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    mnemonic = db.Column(db.String(16))
-    description = db.Column(db.String(256))
+    def __str__(self):
+        return self.name
 
 
 class Library(db.Model):
@@ -83,9 +52,66 @@ class Library(db.Model):
     name = db.Column(db.String(256))
 
 
+class Position(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    mnemonic = db.Column(db.String(16))
+    description = db.Column(db.String(256))
+    esemplari = db.relationship("Esemplare", backref="position", lazy="dynamic")
+
+    def __str__(self):
+        return '%s(%s)' % (self.mnemonic, self.description)
+
+
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
-    #children = db.relationship("Category", backref="parent", lazy="dynamic")
+    esemplari = db.relationship("Opera", backref="category", lazy="dynamic")
+    parent_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    children = db.relationship("Category",
+                               backref=db.backref("parent", remote_side=[id]),
+                               lazy="dynamic")
+
+    def __str__(self):
+        return '<Category: %s>' % (self.name)
+
+
+class Opera(db.Model):
+    id = db.Column(db.String(32), primary_key=True, unique=True)
+    title = db.Column(db.String(140))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    authors = db.relationship("Author",
+                              secondary="opera_author",
+                              backref=db.backref("opere"))
+    esemplari = db.relationship("Esemplare", backref="opera", lazy="dynamic")
+
+    __mapper_args__ = {
+        'version_id_col': id,
+        'version_id_generator': lambda version: uuid4().hex
+    }
+
+    def __unicode__(self):
+        return '<Opera: %s>' % self.title
+
+
+class Esemplare(db.Model):
+    id = db.Column(db.String(32), primary_key=True, unique=True)
+    opera_id = db.Column(db.Integer, db.ForeignKey('opera.id'))
+    position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
+
+    __mapper_args__ = {
+        'version_id_col': id,
+        'version_id_generator': lambda version: uuid4().hex
+    }
+
+    def __str__(self):
+        return '<Esemplare: %s>' % self.opera.title
+
+opera_author = db.Table('opera_author',
+                       db.Column('opera_id', db.String(32),
+                                 db.ForeignKey('opera.id')),
+                       db.Column('author_id', db.Integer,
+                                 db.ForeignKey('author.id'))
+                       )
+
 
 #TODO: prestito
