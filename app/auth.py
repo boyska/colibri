@@ -16,13 +16,10 @@ def create_user():
         m = models.Position()
         m.mnemonic = 'mensolone'
         m.description = 'quello grosso, dai!'
-        db.session.add(m)
-        m = models.Position()
-        m.mnemonic = 'scaffaluccio'
-        m.description = "piccino piccio'"
-        db.session.add(m)
-        db.session.commit()
-    if models.Opera.query.count() == 0:
+        m2 = models.Position()
+        m2.mnemonic = 'scaffaluccio'
+        m2.description = "piccino piccio'"
+
         aut_k = models.Author()
         aut_k.name = 'Kernighan'
         aut_r = models.Author()
@@ -30,7 +27,22 @@ def create_user():
         op = models.Opera()
         op.title = 'Linguaggio C'
         op.authors = [aut_k, aut_r]
-        db.session.add(op)
+        es = models.Esemplare()
+        es.opera = op
+        es.position = m
+        db.session.add(es)
+        es = models.Esemplare()
+        es.opera = op
+        es.position = m2
+        db.session.add(es)
+
+        op = models.Opera()
+        op.title = 'The UNIX programming environment'
+        op.authors = [aut_k]
+        es = models.Esemplare()
+        es.opera = op
+        es.position = m
+        db.session.add(es)
         db.session.commit()
     if models.Role.query.count() == 0:
         supa = user_datastore.create_role(name='super',

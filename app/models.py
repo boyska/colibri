@@ -22,7 +22,7 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
-    def __str__(self):
+    def __unicode__(self):
         return '<Role: %s>' % (self.name)
 
 
@@ -35,7 +35,7 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
 
-    def __str__(self):
+    def __unicode__(self):
         return '<Role: %s>' % (self.email)
 
 
@@ -43,7 +43,7 @@ class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(512))
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
 
@@ -58,7 +58,7 @@ class Position(db.Model):
     description = db.Column(db.String(256))
     esemplari = db.relationship("Esemplare", backref="position", lazy="dynamic")
 
-    def __str__(self):
+    def __unicode__(self):
         return '%s(%s)' % (self.mnemonic, self.description)
 
 
@@ -71,8 +71,8 @@ class Category(db.Model):
                                backref=db.backref("parent", remote_side=[id]),
                                lazy="dynamic")
 
-    def __str__(self):
-        return '<Category: %s>' % (self.name)
+    def __unicode__(self):
+        return '<Category: %s>' % self.name
 
 
 class Opera(db.Model):
@@ -103,7 +103,7 @@ class Esemplare(db.Model):
         'version_id_generator': lambda version: uuid4().hex
     }
 
-    def __str__(self):
+    def __unicode__(self):
         return '<Esemplare: %s>' % self.opera.title
 
 opera_author = db.Table('opera_author',
