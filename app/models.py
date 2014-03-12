@@ -107,11 +107,11 @@ class Esemplare(db.Model):
         return '<Esemplare: %s>' % self.opera.title
 
 opera_author = db.Table('opera_author',
-                       db.Column('opera_id', db.String(32),
-                                 db.ForeignKey('opera.id')),
-                       db.Column('author_id', db.Integer,
-                                 db.ForeignKey('author.id'))
-                       )
+                        db.Column('opera_id', db.String(32),
+                                  db.ForeignKey('opera.id')),
+                        db.Column('author_id', db.Integer,
+                                  db.ForeignKey('author.id'))
+                        )
 
 
 #TODO: prestito
