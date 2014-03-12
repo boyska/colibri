@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from flask.ext.security import UserMixin, RoleMixin
+import flask.ext.whooshalchemy
 
 import app
 db = app.db
@@ -40,6 +41,7 @@ class User(db.Model, UserMixin):
 
 
 class Author(db.Model):
+    __searchable__ = ['name']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(512))
 
@@ -76,6 +78,7 @@ class Category(db.Model):
 
 
 class Opera(db.Model):
+    __searchable__ = ['title']
     id = db.Column(db.String(32), primary_key=True, unique=True)
     title = db.Column(db.String(140))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
