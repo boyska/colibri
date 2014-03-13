@@ -5,10 +5,12 @@
 
 {% block main_content %}
 {{ pre_content }}
-<table class="table table-striped">
-	{% block list %}
-	{% endblock list %}
-</table>
+<div class="table-responsive">
+	<table class="table table-striped">
+		{% block list %}
+		{% endblock list %}
+	</table>
+</div>
 {{ post_content }}
 {% endblock main_content %}
 {# vim: set ft=jinja: #}

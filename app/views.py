@@ -32,7 +32,8 @@ def _link_opera(es):
 def esemplare(id):
     es = models.Esemplare.query.get_or_404(id)
     html = '<pre>%s</pre>%s' % (escape(str(es)), _link_opera(es.opera))
-    return render_template('base.html', title=es.opera.title, content=html)
+    return render_template('base.html', title=es.opera.title, subtitle=es.id,
+                           content=html)
 
 
 @app.route('/opera/<id>')
@@ -41,7 +42,8 @@ def opera(id):
     html = '<pre>%s</pre>%s' % (escape(str(op)),
                                 ','.join(_link_esemplare(es)
                                          for es in op.esemplari))
-    return render_template('base.html', title=op.title, content=html)
+    return render_template('base.html', title=op.title, subtitle=op.id,
+                           content=html)
 
 
 @app.route('/search')

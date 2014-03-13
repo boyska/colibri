@@ -41,6 +41,11 @@
 	{% block pagetitle %}
 	{{title if title else "Colibri"}}
 	{% endblock pagetitle %}
+	{% block subtitle %}
+	{% if subtitle %}
+	<small>{{ subtitle }}</small>
+	{% endif %}
+	{% endblock %}
 </h1>
 
 {% block main_content %}
