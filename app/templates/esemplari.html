@@ -4,7 +4,18 @@
 {{title if title else "Esemplari"}}
 {% endblock %}
 
+{% block pre_content %}
+{{ super() }}
+{% if esemplari|length > 0 %}
+<p class="bg-info">{{esemplari|length}} results</p>
+{% else %}
+<p class="bg-danger">{{esemplari|length}} results</p>
+{% endif %}
+{% endblock pre_content %}
+
 {% block list %}
+{% if esemplari %}
+
 <thead>
 	<tr>
 		<th>Title</th>
@@ -23,5 +34,6 @@
 </tr>
 {% endfor %}
 </tbody>
+{% endif %}
 {% endblock %}
 {# vim: set ft=jinja: #}

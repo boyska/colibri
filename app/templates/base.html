@@ -48,8 +48,10 @@
 	{% endblock %}
 </h1>
 
+<div class="container">
 {% block main_content %}
 {{ content|safe if content else lipsum(2) }}
 {% endblock main_content %}
+</div>
 {% endblock content %}
 {# vim: set ft=jinja: #}
