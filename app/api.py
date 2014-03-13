@@ -43,6 +43,6 @@ def os_description():
   <ShortName>Colibri Node</ShortName>
   <Description>Search books &amp; resist</Description>
   <Url type="application/rss+xml" template="%s?q={searchTerms}"/>
-</OpenSearchDescription>''' % \
-        (request.host_url.rstrip('/') + url_for('os_search'),)
+</OpenSearchDescription>
+''' % (request.host_url.rstrip('/') + url_for('os_search'),)
     return Response(xml, mimetype='application/opensearchdescription+xml')
