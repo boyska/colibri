@@ -1,6 +1,6 @@
-from flask import render_template, url_for, escape
+from flask import render_template, url_for, escape, request
 from flask.ext.security import login_required
-from app import app, models
+from app import app, models, utils
 
 
 @app.route('/')
@@ -42,3 +42,13 @@ def opera(id):
                                 ','.join(_link_esemplare(es)
                                          for es in op.esemplari))
     return render_template('base.html', title=op.title, content=html)
+
+
+@app.route('/search')
+def search():
+    howmany = 10
+    querystr = request.args.get('q', '')
+    results = utils.search(querystr).limit(howmany)
+    return render_template('esemplari.html',
+                           title="Risultati ricerca",
+                           esemplari=results.all())

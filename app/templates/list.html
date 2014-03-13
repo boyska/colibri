@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block pagetitle %}
+{{title if title else "List"}}
+{% endblock %}
+
+{% block main_content %}
+{{ pre_content }}
+<table class="table table-striped">
+	{% block list %}
+	{% endblock list %}
+</table>
+{{ post_content }}
+{% endblock main_content %}
+{# vim: set ft=jinja: #}

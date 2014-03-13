@@ -1,5 +1,5 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}{{title if title else "Colibri"}}{% endblock %}
+{% block title %}Colibri{{' - ' if title }}{{title}}{% endblock %}
 
 {% block navbar %}
 <nav class="navbar navbar-default" role="navigation">
@@ -37,8 +37,14 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{title if title else "Colibri"}}</h1>
+<h1>
+	{% block pagetitle %}
+	{{title if title else "Colibri"}}
+	{% endblock pagetitle %}
+</h1>
 
+{% block main_content %}
 {{ content|safe if content else lipsum(2) }}
-{% endblock %}
+{% endblock main_content %}
+{% endblock content %}
 {# vim: set ft=jinja: #}

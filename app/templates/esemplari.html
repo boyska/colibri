@@ -1,0 +1,27 @@
+{% extends "list.html" %}
+
+{% block pagetitle %}
+{{title if title else "Esemplari"}}
+{% endblock %}
+
+{% block list %}
+<thead>
+	<tr>
+		<th>Title</th>
+		<th>Authors</th>
+		<th>Position</th>
+		<th>Actions</th>
+	</tr>
+</thead>
+<tbody>
+{% for es in esemplari %}
+<tr>
+	<td title="{{es.opera.id}}">{{es.opera.title}}</td>
+	<td>{{es.opera.authors|join(',')}}</td>
+	<td>{{es.position}}</td>
+	<td></td>
+</tr>
+{% endfor %}
+</tbody>
+{% endblock %}
+{# vim: set ft=jinja: #}
