@@ -1,6 +1,6 @@
 import flask
-from flask import url_for
-from flask.ext.admin import Admin
+from flask import url_for, escape
+from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.wtf import Form
 from wtforms import TextField
 # from flask.ext.admin.form import rules
@@ -99,6 +99,30 @@ class CategoryView(CustomView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
+
+class SummaryView(BaseView):
+    def esemplari_for_position(self):
+        #FIXME: sbagliato
+        group = db.session.query(models.Position,
+                                 db.func.count(models.Esemplare.id).
+                                 label('esemplari')).\
+            group_by(models.Esemplare.position_id)
+        return '<br/>'.join(escape('%s=%d' % (unicode(p), c))
+                            for p, c in group.all())
+
+    def total_esemplari(self):
+        tot = models.Esemplare.query.count()
+        return '%d Esemplari' % tot
+
+    def total_opere(self):
+        tot = models.Opera.query.count()
+        return '%d Opere' % tot
+
+    @expose('/')
+    def index(self):
+        totals = (self.total_esemplari, self.total_opere)
+        return self.render('base_report.html',
+                           content='<br/>'.join(func() for func in totals))
 admin.add_view(UserView(models.User, db.session, category='SuperAdmin'))
 admin.add_view(UserView(models.Role, db.session, category='SuperAdmin'))
 admin.add_view(OperaView(models.Opera, db.session))
@@ -107,3 +131,5 @@ admin.add_view(AuthorView(models.Author, db.session))
 
 admin.add_view(CategoryView(models.Position, db.session, category='Meta'))
 admin.add_view(CategoryView(models.Category, db.session, category='Meta'))
+
+admin.add_view(SummaryView(name='Summary', category='Report'))

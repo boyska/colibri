@@ -1,0 +1,10 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{% block pagetitle %}
+<h1>{{title if title else 'Report'}}</h1>
+{% endblock pagetitle %}
+{% block content %}
+{{ content|safe }}
+{% endblock content %}
+{% endblock body %}
+{# vim: set ft=jinja: #}
