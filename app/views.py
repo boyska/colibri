@@ -39,11 +39,10 @@ def esemplare(id):
 @app.route('/opera/<id>')
 def opera(id):
     op = models.Opera.query.get_or_404(id)
-    html = '<pre>%s</pre>%s' % (escape(str(op)),
-                                ','.join(_link_esemplare(es)
-                                         for es in op.esemplari))
-    return render_template('base.html', title=op.title, subtitle=op.id,
-                           content=html)
+    #html = '<pre>%s</pre>%s' % (escape(str(op)),
+    #                            ','.join(_link_esemplare(es)
+    #                                     for es in op.esemplari))
+    return render_template('opera.html', opera=op)
 
 
 @app.route('/search')
@@ -53,4 +52,4 @@ def search():
     results = utils.search(querystr).limit(howmany)
     return render_template('esemplari.html',
                            title="Risultati ricerca",
-                           esemplari=results.all())
+                           items=results.all())

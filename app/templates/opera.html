@@ -1,0 +1,50 @@
+{% extends "list.html" %}
+{# one parameter: opera #}
+{% block pagetitle %}
+{{opera.title}}<small>Opera {{opera.id}}</small>
+{% endblock %}
+
+{% block pre_content %}
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<th>Authors</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for a in opera.authors %}
+	<tr>
+		<td>{{a.name}}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endblock pre_content %}
+
+{% block list %}
+{% if opera.esemplari %}
+<thead>
+	<tr>
+		<th>Esemplare</th>
+		<th>Position name</th>
+		<th>Position notes</th>
+	</tr>
+</thead>
+<tbody>
+{% for es in opera.esemplari %}
+<tr>
+	<td title="{{es.id}}">
+		<a href="{{ url_for('esemplare', id=es.id) }}">
+			{{opera.title}}
+		</a>
+	</td>
+	<td>{{es.position.mnemonic}}</td>
+	<td>{{es.position.description}}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% else %}{# no esemplari #}
+<p class="alert alert-warning">No esemplari available</p>
+{% endif %}
+{% endblock list %}
+{# vim: set ft=jinja: #}

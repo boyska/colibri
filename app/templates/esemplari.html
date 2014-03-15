@@ -6,15 +6,15 @@
 
 {% block pre_content %}
 {{ super() }}
-{% if esemplari|length > 0 %}
-<p class="bg-info">{{esemplari|length}} results</p>
+{% if items|length > 0 %}
+<p class="alert alert-info">{{items|length}} results</p>
 {% else %}
-<p class="bg-danger">{{esemplari|length}} results</p>
+<p class="alert alert-warning">{{items|length}} results</p>
 {% endif %}
 {% endblock pre_content %}
 
 {% block list %}
-{% if esemplari %}
+{% if items %}
 
 <thead>
 	<tr>
@@ -25,9 +25,13 @@
 	</tr>
 </thead>
 <tbody>
-{% for es in esemplari %}
+{% for es in items %}
 <tr>
-	<td title="{{es.opera.id}}">{{es.opera.title}}</td>
+	<td title="{{es.opera.id}}">
+		<a href="{{ url_for('opera', id=es.opera.id) }}">
+			{{es.opera.title}}
+		</a>
+	</td>
 	<td>{{es.opera.authors|join(',')}}</td>
 	<td>{{es.position}}</td>
 	<td></td>

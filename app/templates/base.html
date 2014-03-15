@@ -2,7 +2,11 @@
 {% block title %}Colibri{{' - ' if title }}{{title}}{% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-default" role="navigation">
+<!-- This is to permit navbar-fixed-top -->
+<style>
+body { padding-top: 70px; }
+</style>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -13,7 +17,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#">Colibri</a>
-    </div>
+    </div><!-- navbar-header -->
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -22,13 +26,15 @@
         <li><a href="/about">About</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search" method="get"
-	      action="/search">
+        action="/search">
         <div class="form-group">
           <input type="text" name="q" class="form-control" placeholder="Search">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
+        {# TODO: user name, if logged #}
+        <p class="navbar-text">... books!</p>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -38,14 +44,14 @@
 
 {% block content %}
 <h1>
-	{% block pagetitle %}
-	{{title if title else "Colibri"}}
-	{% endblock pagetitle %}
-	{% block subtitle %}
-	{% if subtitle %}
-	<small>{{ subtitle }}</small>
-	{% endif %}
-	{% endblock %}
+  {% block pagetitle %}
+  {{title if title else "Colibri"}}
+  {% endblock pagetitle %}
+  {% block subtitle %}
+  {% if subtitle %}
+  <small>{{ subtitle }}</small>
+  {% endif %}
+  {% endblock %}
 </h1>
 
 <div class="container">
@@ -54,4 +60,4 @@
 {% endblock main_content %}
 </div>
 {% endblock content %}
-{# vim: set ft=jinja: #}
+{# vim: set ts=2 sw=2 et ft=jinja: #}
