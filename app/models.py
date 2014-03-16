@@ -67,7 +67,7 @@ class Position(db.Model):
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
-    esemplari = db.relationship("Opera", backref="category", lazy="dynamic")
+    opere = db.relationship("Opera", backref="category", lazy="dynamic")
     parent_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     children = db.relationship("Category",
                                backref=db.backref("parent", remote_side=[id]),

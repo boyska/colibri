@@ -10,8 +10,17 @@ security = Security(app, user_datastore)
 #TODO: rimuovi e fai gestione degli utenti da linea di comando
 
 @app.route('/crea')
-def create_user():
+def create_stuff():
     db.create_all()
+    if models.Category.query.count() == 0:
+        prog = models.Category()
+        prog.name = 'Programming'
+        db.session.add(prog)
+        os = models.Category()
+        os.name = 'Operating Systems'
+        db.session.add(os)
+        db.session.commit()
+
     if models.Position.query.count() == 0:
         m = models.Position()
         m.mnemonic = 'mensolone'

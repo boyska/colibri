@@ -1,8 +1,6 @@
 import flask
 from flask import url_for, escape
 from flask.ext.admin import Admin, BaseView, expose
-from flask.ext.wtf import Form
-from wtforms import TextField
 # from flask.ext.admin.form import rules
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin.form.fields import Select2TagsField
@@ -25,7 +23,7 @@ class CustomView(ModelView):
     def linked_formatter(self, context, model, name):
         def link_one(field, name):
             if not field:
-                return 'N/A'
+                return '<tt>N/A</tt>'
             nice = unicode(field)
             html = '<a href="%s">%s</a>' % (
                 url_for('%sview.edit_view' % name, id=field.id),
@@ -53,18 +51,28 @@ class UserView(CustomView):
         return current_user.is_authenticated()
 
 
-class OperaForm(Form):
-    title = TextField("")
-    authors = Select2TagsField(default="",)
+def _author_lookup(author_string):
+    aut = models.Author.query.filter_by(name=author_string).first()
+    if aut is None:
+        aut = models.Author()
+        aut.name = author_string
+    return aut
 
 
 class OperaView(CustomView):
-    form_excluded_columns = ('esemplari', )
-    #form_overrides = dict(authors=Select2TagsField)
-
-    def is_accessible(self):
-        return current_user.is_authenticated()
-
+    column_list = ('title', 'category', 'authors')
+    column_formatters = {
+        'category': CustomView.linked_formatter,
+        'authors': CustomView.linked_formatter,
+    }
+    form_create_rules = ('title', 'category', 'authors')
+    form_extra_fields = {
+        'authors': Select2TagsField('Autori',
+                                    coerce=_author_lookup,
+                                    save_as_list=[(c.id, unicode(c))
+                                                  for c in models.Author.query.all()]
+                                    )
+    }
 
 
 class BookView(CustomView):
@@ -80,6 +88,7 @@ class BookView(CustomView):
 
     def is_accessible(self):
         return current_user.is_authenticated()
+
 
 
 class AuthorView(CustomView):
