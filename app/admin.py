@@ -20,6 +20,9 @@ class CustomView(ModelView):
     '''
     form_excluded_columns = ('confirmed_at', 'password')
 
+    def is_accessible(self):
+        return current_user.is_authenticated()
+
     def linked_formatter(self, context, model, name):
         def link_one(field, name):
             if not field:
@@ -46,9 +49,6 @@ class UserView(CustomView):
     #form_extra_fields = {
     #    'password': PasswordField('Password')
     #}
-
-    def is_accessible(self):
-        return current_user.is_authenticated()
 
 
 def _author_lookup(author_string):
@@ -86,10 +86,6 @@ class BookView(CustomView):
         'opera': CustomView.linked_formatter
     }
 
-    def is_accessible(self):
-        return current_user.is_authenticated()
-
-
 
 class AuthorView(CustomView):
     #form_excluded_columns = ('opere', )
@@ -98,15 +94,9 @@ class AuthorView(CustomView):
         'opere': CustomView.linked_formatter
     }
 
-    def is_accessible(self):
-        return current_user.is_authenticated()
-
 
 class CategoryView(CustomView):
     form_excluded_columns = ('books', )
-
-    def is_accessible(self):
-        return current_user.is_authenticated()
 
 
 class SummaryView(BaseView):
@@ -126,6 +116,9 @@ class SummaryView(BaseView):
     def total_opere(self):
         tot = models.Opera.query.count()
         return '%d Opere' % tot
+
+    def is_accessible(self):
+        return current_user.is_authenticated()
 
     @expose('/')
     def index(self):
