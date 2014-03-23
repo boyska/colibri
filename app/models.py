@@ -58,7 +58,8 @@ class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mnemonic = db.Column(db.String(16))
     description = db.Column(db.String(256))
-    esemplari = db.relationship("Esemplare", backref="position", lazy="dynamic")
+    esemplari = db.relationship("Esemplare", backref="position",
+                                lazy="dynamic")
 
     def __unicode__(self):
         return '%s(%s)' % (self.mnemonic, self.description)
@@ -77,41 +78,40 @@ class Category(db.Model):
         return '<Category: %s>' % self.name
 
 
-class Opera(db.Model):
+class UUIDMixin(object):
+    id = db.Column(db.String(32), primary_key=True, unique=True,
+                   default=lambda: uuid4().hex)
+
+
+# TODO: i18n-ize as Work
+class Opera(UUIDMixin, db.Model):
+    ''' According to FRBR, this is Work + Expression '''
+    __tablename__ = 'work'
     __searchable__ = ['title']
-    id = db.Column(db.String(32), primary_key=True, unique=True)
-    title = db.Column(db.String(140))
+    title = db.Column(db.String())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     authors = db.relationship("Author",
                               secondary="opera_author",
                               backref=db.backref("opere"))
     esemplari = db.relationship("Esemplare", backref="opera", lazy="dynamic")
 
-    __mapper_args__ = {
-        'version_id_col': id,
-        'version_id_generator': lambda version: uuid4().hex
-    }
-
     def __unicode__(self):
         return '<Opera: %s>' % self.title
 
 
-class Esemplare(db.Model):
-    id = db.Column(db.String(32), primary_key=True, unique=True)
-    opera_id = db.Column(db.Integer, db.ForeignKey('opera.id'))
+# TODO: i18n-ize as Physical
+class Esemplare(UUIDMixin, db.Model):
+    ''' According to FRBR, this is Item + Manifestation '''
+    __tablename__ = 'physical'
+    opera_id = db.Column(db.Integer, db.ForeignKey('work.id'))
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
-
-    __mapper_args__ = {
-        'version_id_col': id,
-        'version_id_generator': lambda version: uuid4().hex
-    }
 
     def __unicode__(self):
         return '<Esemplare: %s>' % self.opera.title
 
 opera_author = db.Table('opera_author',
                         db.Column('opera_id', db.String(32),
-                                  db.ForeignKey('opera.id')),
+                                  db.ForeignKey('work.id')),
                         db.Column('author_id', db.Integer,
                                   db.ForeignKey('author.id'))
                         )
