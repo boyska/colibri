@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block pre_content %}
+{% if current_user.is_authenticated() %}
+<div class="text-right">
+<a class="btn btn-primary"
+	href="{{url_for('operaview.edit_view', id=opera.id, url=request.path)}}">
+	 <span class="glyphicon glyphicon-pencil"></span>
+	Edit
+</a>
+</div>
+{% endif %}
+{% if opera.category %}
+<strong>Category</strong>{{opera.category}}
+{% endif %}
 <table class="table table-condensed">
 	<thead>
 		<tr>

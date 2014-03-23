@@ -16,13 +16,12 @@ body { padding-top: 70px; }
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Colibri</a>
+      <a class="navbar-brand" href="/">Home</a>
     </div><!-- navbar-header -->
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
         <li><a href="/about">About</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search" method="get"
@@ -56,11 +55,11 @@ body { padding-top: 70px; }
   {% block pagetitle %}
   {{title if title else "Colibri"}}
   {% endblock pagetitle %}
-  {% block subtitle %}
+  <small>{% block subtitle %}
   {% if subtitle %}
-  <small>{{ subtitle }}</small>
+  {{ subtitle }}
   {% endif %}
-  {% endblock %}
+  {% endblock %}</small>
 </h1>
 
 {% block flash %}

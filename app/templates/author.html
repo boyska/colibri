@@ -1,8 +1,22 @@
 {% extends "list.html" %}
 {# one parameter: author #}
 {% block pagetitle %}
-{{author.title}}<small>Author {{author.id}}</small>
+{{author.name}}
 {% endblock %}
+{% block subtitle %}{{author.id}}{% endblock subtitle %}
+
+
+{% block pre_content %}
+{% if current_user.is_authenticated() %}
+<div class="text-right">
+<a class="btn btn-primary"
+	href="{{url_for('authorview.edit_view', id=author.id, url=request.path)}}">
+	 <span class="glyphicon glyphicon-pencil"></span>
+	Edit
+</a>
+</div>
+{% endif %}
+{% endblock pre_content %}
 
 {% block list %}
 {% if author.opere %}
