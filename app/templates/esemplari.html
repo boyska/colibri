@@ -21,7 +21,7 @@
 		<th>Title</th>
 		<th>Authors</th>
 		<th>Position</th>
-		<th>Actions</th>
+		<th>Category</th>
 	</tr>
 </thead>
 <tbody>
@@ -32,9 +32,16 @@
 			{{es.opera.title}}
 		</a>
 	</td>
-	<td>{{es.opera.authors|join(',')}}</td>
+	<td>
+		{% for a in es.opera.authors %}
+		<a href="{{url_for('author', id=a.id)}}">
+			{{a.name}}
+		</a>
+		{% if not loop.last %},{% endif %}
+		{% endfor %}
+	</td>
 	<td>{{es.position}}</td>
-	<td></td>
+	<td>{{es.category}}</td>
 </tr>
 {% endfor %}
 </tbody>

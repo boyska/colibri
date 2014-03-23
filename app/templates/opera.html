@@ -14,7 +14,11 @@
 	<tbody>
 	{% for a in opera.authors %}
 	<tr>
-		<td>{{a.name}}</td>
+		<td title="{{a.id}}">
+			<a href="{{url_for('author', id=a.id)}}">
+				{{a.name}}
+			</a>
+		</td>
 	</tr>
 	{% endfor %}
 	</tbody>

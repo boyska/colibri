@@ -1,0 +1,32 @@
+{% extends "list.html" %}
+{# one parameter: author #}
+{% block pagetitle %}
+{{author.title}}<small>Author {{author.id}}</small>
+{% endblock %}
+
+{% block list %}
+{% if author.opere %}
+<thead>
+	<tr>
+		<th>Opera</th>
+		<th>Category</th>
+	</tr>
+</thead>
+<tbody>
+{% for op in author.opere %}
+<tr>
+	<td title="{{op.id}}">
+		<a href="{{ url_for('opera', id=op.id) }}">
+			{{op.title}}
+		</a>
+	</td>
+	<td>{{op.category}}</td>
+</tr>
+{% endfor %}
+</tbody>
+{% else %}{# no esemplari #}
+<p class="alert alert-warning">No esemplari available</p>
+{% endif %}
+{% endblock list %}
+{# vim: set ft=jinja: #}
+
